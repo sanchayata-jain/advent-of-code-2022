@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 )
 
@@ -14,20 +15,26 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	elfNum, err := calorieCounter(caloriesList)
+	highestCaloriesSum, calorieSumList, err := calorieCounter(caloriesList)
 	if err != nil {
 		log.Printf("calorie Counter: %s", err)
 	}
-	fmt.Print(elfNum)
+	sum := topThreeCaloriesSum(calorieSumList)
+
+	fmt.Println(highestCaloriesSum) // for part 1
+	fmt.Println(sum) // for part 2
 }
 
-// calorieCounter sums the number of calories each elf consumes and returns the highest sum of calories consumed by an elf.
-func calorieCounter(caloriesList []string) (int, error) {
+// calorieCounter sums the number of calories each elf consumes and returns the highest sum of calories consumed by an elf
+// and a list of the sum of calories
+func calorieCounter(caloriesList []string) (int, []int, error) {
 	caloriesList = append(caloriesList, "")
+	var caloriesSumList []int
 	maxCalorieSum := 0
 	sum := 0
 	for _, calorie := range caloriesList {
 		if calorie == "" {
+			caloriesSumList = append(caloriesSumList, sum)
 			if sum > maxCalorieSum {
 				maxCalorieSum = sum
 			}
@@ -36,12 +43,22 @@ func calorieCounter(caloriesList []string) (int, error) {
 		}
 		calorieInt, err := strconv.Atoi(calorie)
 		if err != nil {
-			return 0, err
+			return 0, nil, err
 		}
 		sum += calorieInt
 	}
 
-	return maxCalorieSum, nil
+	return maxCalorieSum, caloriesSumList, nil
+}
+
+// topThreeCaloriesSum sorts the caloriesSumList and returns the sum of the top three highest calories sum
+func topThreeCaloriesSum(caloriesSumList []int) int{
+	sort.Ints(caloriesSumList)
+	sum := 0
+	for i := 1; i <= 3; i++ {
+		sum += caloriesSumList[len(caloriesSumList) - i]
+	}
+	return sum
 }
 
 func readInputFile(filepath string) ([]string, error) {
