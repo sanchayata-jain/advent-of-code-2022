@@ -8,6 +8,7 @@ import (
 )
 
 type commonCompartmentItems map[rune]struct{}
+type commonItems map[rune]bool
 
 func main() {
 	filepath := "./input_file.txt"
@@ -16,7 +17,9 @@ func main() {
 		log.Fatal(err)
 	}
 	totalPriority := findCommonItem(input)
-	fmt.Println(totalPriority)
+	fmt.Println(totalPriority) //for part 1
+	totalGroupPriorities := findCommonItemInGroup(input)
+	fmt.Println(totalGroupPriorities) //for part 2
 
 }
 
@@ -34,6 +37,34 @@ func findCommonItem(input []string) int {
 			if _, exists := items[letter2]; exists {
 				priority += convert(letter2)
 				break
+			}
+		}
+	}
+	return priority
+}
+
+// for part 2
+func findCommonItemInGroup(input []string) int {
+	priority := 0
+	var group []string
+	for i, rucksack := range input {
+		group = append(group, rucksack)
+		items := commonItems{}
+		if (i + 1) % 3 == 0 {
+			for _, letter := range group[i-2] {
+				items[letter] = false
+			}
+			for _, letter2 := range group[i-1] {
+				if _, exists := items[letter2]; exists {
+					items[letter2] = true
+				}
+			}
+			for _, letter3 := range group[i] {
+				if v, exists := items[letter3]; exists && v {
+					// this means this letter is present in all three rucksacks in the group, we can now convert
+					priority += convert(letter3)
+					break
+				}
 			}
 		}
 	}
