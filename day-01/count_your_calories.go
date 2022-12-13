@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	filepath := "../input_file.txt"
+	filepath := "./input_file.txt"
 	caloriesList, err := readInputFile(filepath)
 	if err != nil {
 		log.Fatal(err)
@@ -22,7 +22,7 @@ func main() {
 	sum := topThreeCaloriesSum(calorieSumList)
 
 	fmt.Println(highestCaloriesSum) // for part 1
-	fmt.Println(sum) // for part 2
+	fmt.Println(sum)                // for part 2
 }
 
 // calorieCounter sums the number of calories each elf consumes and returns the highest sum of calories consumed by an elf
@@ -52,11 +52,11 @@ func calorieCounter(caloriesList []string) (int, []int, error) {
 }
 
 // topThreeCaloriesSum sorts the caloriesSumList and returns the sum of the top three highest calories sum
-func topThreeCaloriesSum(caloriesSumList []int) int{
+func topThreeCaloriesSum(caloriesSumList []int) int {
 	sort.Ints(caloriesSumList)
 	sum := 0
 	for i := 1; i <= 3; i++ {
-		sum += caloriesSumList[len(caloriesSumList) - i]
+		sum += caloriesSumList[len(caloriesSumList)-i]
 	}
 	return sum
 }
