@@ -15,15 +15,17 @@ func main() {
 	}
 	marker := findMarker(dataStream, 4) //for part 1
 	fmt.Println(marker)
+	messageMarker := findMarker(dataStream, 14)
+	fmt.Println(messageMarker) //for part 2
 }
 
 func findMarker(dataStream string, seqLength int) int {
 	var unique bool
 	var marker int
 	for i := 0; i < len(dataStream)-seqLength; i++ {
-		unique = isUnique(dataStream[i : i+4])
+		unique = isUnique(dataStream[i : i+seqLength])
 		if unique {
-			marker = i + 4
+			marker = i + seqLength
 			break
 		}
 	}
